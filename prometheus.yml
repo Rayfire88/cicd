@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'webhook-app'
+    static_configs:
+      - targets:
+          - 'host.docker.internal:5000'  # host machine (Windows/macOS)
+          - 'flaskapp:5000'              # Docker container
