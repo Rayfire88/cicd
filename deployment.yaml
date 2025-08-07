@@ -12,9 +12,8 @@ spec:
       labels:
         app: app
     spec:
-    containers:
+      containers:
       - name: app
         image: ray8fire/cicd:latest
         ports:
         - containerPort: 8000
-
