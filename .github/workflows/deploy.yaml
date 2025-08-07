@@ -1,38 +1,40 @@
-name: CI/CD Deploy to Minikube
+name: Build and Deploy to Kubernetes
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout Code
+    - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Login to DockerHub
+    - name: Log in to DockerHub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker Image
+    - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ray8fire/myapp:latest
+        tags: ray8fire/app:latest
 
     - name: Set up kubectl
       uses: azure/setup-kubectl@v3
       with:
-        version: 'latest'
+        version: 'v1.31.0'
 
-    - name: Deploy to Minikube (locally or staging cluster)
+    - name: Deploy to Minikube (or remote K8s)
       run: |
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
