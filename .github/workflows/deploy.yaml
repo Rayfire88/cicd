@@ -1,4 +1,4 @@
-name: Build and Deploy to Kubernetes
+name: CI/CD Deploy to Kubernetes
 
 on:
   push:
@@ -22,19 +22,9 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and push Docker image
+    - name: Build and push image to DockerHub
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ray8fire/app:latest
-
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'v1.31.0'
-
-    - name: Deploy to Minikube (or remote K8s)
-      run: |
-        kubectl apply -f deployment.yaml
-        kubectl apply -f service.yaml
+        tags: ray8fire/cicd:latest
